@@ -5,25 +5,7 @@ from PySide import QtCore, QtGui
 #from PySide.QtCore import QX11EmbedWindow
 #from PySide.QtGui import QX11EmbedContainer 
 
-## VideoStream class
-# Wrote this one to test window
-#
-class VideoStream(QtGui, QWidget):
-	def __init__(self, parent=None):
-		super(VideoStream, self).__init__(parent)
 
-		self.video = QtGui.QMovie(self)
-		self.video.setCacheMode(QtGui.QMovie.CacheAll)
-
-		self.vidoeLabel = QtGui.QLabel("No video streaming")
-		self.vidoeLabel.setAlignment(QtCore.Qt.AlignCenter)
-		self.videoLabel.setSizePolicy(QtGui..QSizePolicy.Igonored, QtGui.QSizePolicy.Igonored)
-		self.videoLabel.setBackgroundRole(QtGui.QPallette.Dark)
-		self.videoLabel.setAutoFillBackGround(True)
-
-## Example video display class that I found online
-# Does not use QX11EmbedWidget or QX11EmbedContainer
-#
 class CameraDisplay(QtGui.QLabel):
 	def __init__(self):
 		super(CameraDisplay, self).__init__()
@@ -31,7 +13,7 @@ class CameraDisplay(QtGui.QLabel):
 	def updateFrame(self, image):
 		self.setPixmap(QtGui.QPixmap.fromImage(image))
 
-
+filecount = 0
 ## Class to define frame layout
 #
 class ControlCenter(QtGui.QWidget):
@@ -43,17 +25,23 @@ class ControlCenter(QtGui.QWidget):
 		self.up_camera = CameraDisplay()
 		self.up_camera_signal.connect(self.up_camera.updateFrame)
 
-		grid = QtGui.QGridLayout()
-		grid.setSpacing(10)
+		self.createButtonsLayout()
+		
+		grid = QtGui.QVBoxLayout()
+		#grid.setSpacing(10)
 
 		grid.addWidget(self.up_camera, 0, 0)
+		grid.addLayout(self.buttonsLayout)		
 
 		self.setLayout(grid)
 
-		self.setGeometry(300, 300, 350, 300)
-		self.setWindowTitle('Control Center')
+		self.setGeometry(300, 50, 1280, 920)
+		self.setWindowTitle('Video Stream')
 		self.show()
 
+	## Class for getting data to display
+	# TODO: Figure out how to do this...
+	#
 	def up_camera_callback(self, data):
 		'''This function gets called by an external thread'''
 		try:
@@ -63,7 +51,32 @@ class ControlCenter(QtGui.QWidget):
 		except Exception, e:
 		  print(e)
 
-## TODO: Setup Server that will send video information to this appliation 
+## Screenshot capabilities
+	def screenCaptureWidget(widget): 
+		filename = "Screenshot"
+		global filecount
+		fileformat = "png"
+		pixmap =  QtGui.QPixmap.grabWidget(widget)
+		initialPath = QtCore.QDir.currentPath() + filename + str(filecount) + "." + fileformat 
+		filename = initialPath
+		pixmap.save(filename, fileformat)
+		filecount += 1
+
+	def createButtonsLayout(self):
+		self.saveScreenshotButton = self.createButton("Save Screenshot", self.screenCaptureWidget)
+		self.buttonsLayout = QtGui.QHBoxLayout()
+		#self.addStretch()
+		self.buttonsLayout.addWidget(self.saveScreenshotButton)
+
+	def createButton(self, text, member):
+		button = QtGui.QPushButton(text)
+		button.clicked.connect(member)
+		return button
+
+	def updateScreenshotLabel(self):
+		self.screenshotLabel.setPixmap(self.originalPixmap.scaled(
+			self.screenshotLabel.size(), QtCore.Qt.KeepAspectRatio,
+			QtCore.Qt.SmoothTransformation))
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
