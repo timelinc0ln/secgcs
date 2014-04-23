@@ -1,0 +1,6 @@
+message QGCData {
+    // For the ZeroMQ PUB-SUB messaging to work, we need to specify a
+    // message type for the subscriber to look for.
+    required string msg_type = 1;
+    // TODO: Add serialization for the data we need to get from QGC.
+}
