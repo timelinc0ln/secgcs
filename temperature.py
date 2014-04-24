@@ -18,7 +18,7 @@ import PySide.QtCore
 
 class Communicate(PySide.QtCore.QObject):
     
-    updateBW = PySide.QtCore.pyqtSignal(int)
+    updateBW = PySide.QtCore.Signal(int)
 
 
 class BurningWidget(PySide.QtGui.QWidget):
@@ -50,7 +50,7 @@ class BurningWidget(PySide.QtGui.QWidget):
       
     def drawWidget(self, qp):
       
-        font = PySide.QtGui.QFont('Serif', 7, QtGui.QFont.Light)
+        font = PySide.QtGui.QFont('Serif', 7, PySide.QtGui.QFont.Light)
         qp.setFont(font)
 
         size = self.size()
@@ -77,7 +77,7 @@ class BurningWidget(PySide.QtGui.QWidget):
             qp.drawRect(0, 0, till, h)
 
 
-        pen = QtGui.QPen(PySide.QtGui.QColor(20, 20, 20), 1, 
+        pen = PySide.QtGui.QPen(PySide.QtGui.QColor(20, 20, 20), 1, 
             PySide.QtCore.Qt.SolidLine)
             
         qp.setPen(pen)
