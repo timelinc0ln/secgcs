@@ -2,5 +2,16 @@ message QGCData {
     // For the ZeroMQ PUB-SUB messaging to work, we need to specify a
     // message type for the subscriber to look for.
     required string msg_type = 1;
-    // TODO: Add serialization for the data we need to get from QGC.
+    // Serialized data from QGroundControl.
+    // GPS Position.
+    // Latitude and longitude are represented as doubles.
+    required double latitude = 2;
+    required double longitude = 3;
+    // Aircraft altitude and heading.
+    required double heading = 4;
+    required double altitude = 5;
+    // Optional arguments. Likely these are from the Eagle Tree system
+    // and are thus unobtainable, but such is life.
+    optional int32 outside_temp = 6;
+    optional int32 batt_tmp = 7;
 }
