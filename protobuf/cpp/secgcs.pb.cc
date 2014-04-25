@@ -83,8 +83,8 @@ void protobuf_AddDesc_secgcs_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\014secgcs.proto\"\213\001\n\007QGCData\022\020\n\010msg_type\030\001"
-    " \002(\t\022\020\n\010latitude\030\002 \002(\005\022\021\n\tlongitude\030\003 \002("
-    "\005\022\017\n\007heading\030\004 \002(\001\022\020\n\010altitude\030\005 \002(\001\022\024\n\014"
+    " \002(\t\022\020\n\010latitude\030\002 \002(\001\022\021\n\tlongitude\030\003 \002("
+    "\001\022\017\n\007heading\030\004 \002(\001\022\020\n\010altitude\030\005 \002(\001\022\024\n\014"
     "outside_temp\030\006 \001(\005\022\020\n\010batt_tmp\030\007 \001(\005", 156);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "secgcs.proto", &protobuf_RegisterTypes);
@@ -207,33 +207,33 @@ bool QGCData::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(16)) goto parse_latitude;
+        if (input->ExpectTag(17)) goto parse_latitude;
         break;
       }
 
-      // required int32 latitude = 2;
+      // required double latitude = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED64) {
          parse_latitude:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
                  input, &latitude_)));
           set_has_latitude();
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(24)) goto parse_longitude;
+        if (input->ExpectTag(25)) goto parse_longitude;
         break;
       }
 
-      // required int32 longitude = 3;
+      // required double longitude = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED64) {
          parse_longitude:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
                  input, &longitude_)));
           set_has_longitude();
         } else {
@@ -334,14 +334,14 @@ void QGCData::SerializeWithCachedSizes(
       1, this->msg_type(), output);
   }
 
-  // required int32 latitude = 2;
+  // required double latitude = 2;
   if (has_latitude()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->latitude(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(2, this->latitude(), output);
   }
 
-  // required int32 longitude = 3;
+  // required double longitude = 3;
   if (has_longitude()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->longitude(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(3, this->longitude(), output);
   }
 
   // required double heading = 4;
@@ -382,14 +382,14 @@ void QGCData::SerializeWithCachedSizes(
         1, this->msg_type(), target);
   }
 
-  // required int32 latitude = 2;
+  // required double latitude = 2;
   if (has_latitude()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->latitude(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(2, this->latitude(), target);
   }
 
-  // required int32 longitude = 3;
+  // required double longitude = 3;
   if (has_longitude()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->longitude(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(3, this->longitude(), target);
   }
 
   // required double heading = 4;
@@ -430,18 +430,14 @@ int QGCData::ByteSize() const {
           this->msg_type());
     }
 
-    // required int32 latitude = 2;
+    // required double latitude = 2;
     if (has_latitude()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->latitude());
+      total_size += 1 + 8;
     }
 
-    // required int32 longitude = 3;
+    // required double longitude = 3;
     if (has_longitude()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->longitude());
+      total_size += 1 + 8;
     }
 
     // required double heading = 4;

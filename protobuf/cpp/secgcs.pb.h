@@ -101,19 +101,19 @@ class QGCData : public ::google::protobuf::Message {
   inline ::std::string* release_msg_type();
   inline void set_allocated_msg_type(::std::string* msg_type);
 
-  // required int32 latitude = 2;
+  // required double latitude = 2;
   inline bool has_latitude() const;
   inline void clear_latitude();
   static const int kLatitudeFieldNumber = 2;
-  inline ::google::protobuf::int32 latitude() const;
-  inline void set_latitude(::google::protobuf::int32 value);
+  inline double latitude() const;
+  inline void set_latitude(double value);
 
-  // required int32 longitude = 3;
+  // required double longitude = 3;
   inline bool has_longitude() const;
   inline void clear_longitude();
   static const int kLongitudeFieldNumber = 3;
-  inline ::google::protobuf::int32 longitude() const;
-  inline void set_longitude(::google::protobuf::int32 value);
+  inline double longitude() const;
+  inline void set_longitude(double value);
 
   // required double heading = 4;
   inline bool has_heading() const;
@@ -163,8 +163,8 @@ class QGCData : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* msg_type_;
-  ::google::protobuf::int32 latitude_;
-  ::google::protobuf::int32 longitude_;
+  double latitude_;
+  double longitude_;
   double heading_;
   double altitude_;
   ::google::protobuf::int32 outside_temp_;
@@ -257,7 +257,7 @@ inline void QGCData::set_allocated_msg_type(::std::string* msg_type) {
   }
 }
 
-// required int32 latitude = 2;
+// required double latitude = 2;
 inline bool QGCData::has_latitude() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -271,15 +271,15 @@ inline void QGCData::clear_latitude() {
   latitude_ = 0;
   clear_has_latitude();
 }
-inline ::google::protobuf::int32 QGCData::latitude() const {
+inline double QGCData::latitude() const {
   return latitude_;
 }
-inline void QGCData::set_latitude(::google::protobuf::int32 value) {
+inline void QGCData::set_latitude(double value) {
   set_has_latitude();
   latitude_ = value;
 }
 
-// required int32 longitude = 3;
+// required double longitude = 3;
 inline bool QGCData::has_longitude() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -293,10 +293,10 @@ inline void QGCData::clear_longitude() {
   longitude_ = 0;
   clear_has_longitude();
 }
-inline ::google::protobuf::int32 QGCData::longitude() const {
+inline double QGCData::longitude() const {
   return longitude_;
 }
-inline void QGCData::set_longitude(::google::protobuf::int32 value) {
+inline void QGCData::set_longitude(double value) {
   set_has_longitude();
   longitude_ = value;
 }
