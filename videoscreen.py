@@ -7,6 +7,9 @@ from PySide import QtCore, QtGui
 filecount = 0
 ## Class to define frame layout
 #
+class Communicate(PySide.QtCore.QObject):
+	sendUpdate = Pyside.QtCore.Signal(str)
+
 class ControlCenter(QtGui.QWidget):
 	def __init__(self):
 		super(ControlCenter, self).__init__()
@@ -15,8 +18,11 @@ class ControlCenter(QtGui.QWidget):
 		grid.addLayout(self.buttonsLayout)		
 		self.setLayout(grid)
 
+		self.c1 = Communicate()
+		self.c1.sendUpdate[str].connect(self.sendFilename)
+
 		self.setGeometry(300, 300, 200, 200) # 1920, 700, 200, 200
-		self.setWindowTitle('Video Stream')
+		self.setWindowTitle('SEC GCS')
 		self.show()
 
 ## Screenshot capabilities
@@ -30,7 +36,8 @@ class ControlCenter(QtGui.QWidget):
 		filename = initialPath
 		pixmap.save(filename, fileformat)
 		filecount += 1
-
+		self.sendFilename(filename)
+		
 	def createButtonsLayout(self):
 		self.saveScreenshotButton = self.createButton("Save Screenshot", self.screenCaptureWidget)
 		self.buttonsLayout = QtGui.QHBoxLayout()
@@ -40,6 +47,10 @@ class ControlCenter(QtGui.QWidget):
 		button = QtGui.QPushButton(text)
 		button.clicked.connect(member)
 		return button
+
+	def sendFilename(self, filename):
+		self.c1.sendUpdate.emit(filename)
+
 
 class ScreenShot(QtGui.QWidget):
 	def __init__(self):
