@@ -4,9 +4,9 @@ message QGCData {
     required string msg_type = 1;
     // Serialized data from QGroundControl.
     // GPS Position.
-    // Latitude and longitude are represented as doubles.
-    required double latitude = 2;
-    required double longitude = 3;
+    // Latitude and longitude are represented as int32_t's in MAVLink.
+    required int32 latitude = 2;
+    required int32 longitude = 3;
     // Aircraft altitude and heading.
     required double heading = 4;
     required double altitude = 5;
