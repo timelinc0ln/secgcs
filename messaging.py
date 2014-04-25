@@ -14,7 +14,7 @@ except ImportError:
     print('exiting %s' % __file__, file=sys.stderr)
     exit(-1)
 try:
-    import secgcs_pb2
+    import secgcs_pb2 as pb
 except ImportError:
     print('error: protocol buffer module not found', file=sys.stderr)
     print('exiting %(file)s' % {'file': __file__}, file=sys.stderr)
@@ -34,17 +34,20 @@ class ZMQMessageHandler(object):
     #
     # @param zmq_filter [string] Topic filter for ZeroMQ
     # @param log        [object] Pointer to the mplogger instance
-    def __init__(self, zmq_filter, log=None):
+    def __init__(self, zmq_filter='\x0A\x03\x51\x47\x43', log_target=None):
+        self.log_target = log_target
         self.ctx = zmq.Context()
         self.sock = self.ctx.socket(zmq.SUB)
-        self.sock.setsockopt(zmq.SUBSCRIBE, zmq_filter)
+        self.sock.setsockopt_string(zmq.SUBSCRIBE, zmq_filter)
         self.log('created ZeroMQ subscribe socket', 'info')
+        # Create protobuf message object.
+        self.QGCData = pb.QGCData()
 
     ## Connect to a ZeroMQ PUB server.
     #
     # @param host   [string] The FQDN or IP of the server
     # @param port   [string] The port binding for the server
-    def connect(self, host='localhost', port='5555'):
+    def connect(self, host='127.0.0.100', port='5555'):
         uri = 'tcp://%(host)s:%(port)s' % {'host': host,
                                            'port': port}
         self.sock.connect(uri)
@@ -53,14 +56,28 @@ class ZMQMessageHandler(object):
     ## Receive a message over the ZeroMQ socket.
     #
     # Receive one message from the PUB-SUB model, parse, and return.
-    # TODO: Add code to de-serialize protobufs when .proto format is defined.
+    # The data is serialized using Google protocol buffers, de-serialized,
+    # and then packed into a dict for easy access in Python.
     #
     # @retval data  [string] The message content.
-    def receive(self):
+    def receive(self, verbose=False):
         msg = self.sock.recv()
-        topic, data = msg.split()
-        self.log('recieved message with topic %(topic)s and content %(data)s'
-                 % {'topic': topic, 'data': data}, 'info')
+        self.QGCData.ParseFromString(msg)
+        # We will represent this data as a dict.
+        data = {
+            'latitude': self.QGCData.latitude,
+            'longitude': self.QGCData.longitude,
+            'altitude': self.QGCData.altitude,
+            'heading': self.QGCData.heading
+        }
+        if verbose:
+            print('------------------')
+            print('recieved message')
+            print('type: %s' % self.QGCData.msg_type)
+            print('latitude: %d' % self.QGCData.latitude)
+            print('longitude: %d' % self.QGCData.longitude)
+            print('heading: %d' % self.QGCData.heading)
+            print('altitude: %f' % self.QGCData.altitude)
         return data
 
     ## Wrapper for logging functionality.
@@ -71,8 +88,20 @@ class ZMQMessageHandler(object):
     # @param msg    [string] The message to log
     # @param lvl    [string or int] The message log level
     def log(self, msg, lvl):
-        if self.log is not None:
-            self.log.putLog(lvl, msg)
+        if self.log_target is not None:
+            self.log_target.putLog(lvl, msg)
         else:
             f = sys.stderr if lvl is 'error' else sys.stdout
             print(msg, file=f)
+
+
+## Function to test data link.
+def test():
+    MsgHandler = ZMQMessageHandler()
+    MsgHandler.connect(host='127.0.0.100')
+    while True:
+        MsgHandler.receive(verbose=True)
+
+
+if __name__ == '__main__':
+    test()

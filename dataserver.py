@@ -61,7 +61,7 @@ def server(host='127.0.0.100', port='5555', verbose=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-H', '--hostname', help='hostname',
-                        type=str, default='127.0.0.1')
+                        type=str, default='127.0.0.100')
     parser.add_argument('-p', '--port', help='port', type=str, default='5555')
     parser.add_argument('-v', '--verbose', help='increase output verbosity',
                         action='store_true', default=False)
