@@ -29,7 +29,7 @@ class ControlCenter(QtGui.QWidget):
 		# self.c1 = Communicate()
 		# self.c1.sendUpdate[str].connect(self.sendFilename)
 
-		self.setGeometry(300, 300, 200, 100) # 1920, 700, 200, 200
+		self.setGeometry(1920, 700, 200, 200) # 1920, 700, 200, 200
 		self.setWindowTitle('SEC GCS')
 		self.show()
 
@@ -42,7 +42,7 @@ class ControlCenter(QtGui.QWidget):
 		altname = "Screenshot"	
 		readfile = altname + str(filecount) + "." + fileformat
 
-		pixmap =  QtGui.QPixmap.grabWindow(QtGui.QApplication.desktop().winId(), 500, 500, 1000, 1000) # 1920, 0, 960, 540
+		pixmap =  QtGui.QPixmap.grabWindow(QtGui.QApplication.desktop().winId(), 1920, 0, 960, 540) # 1920, 0, 960, 540
 		initialPath = QtCore.QDir.currentPath() + filename + str(filecount) + "." + fileformat 
 		filename = initialPath
 
